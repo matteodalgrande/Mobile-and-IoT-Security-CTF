@@ -1,0 +1,12 @@
+https://www.youtube.com/watch?v=3FnyzJ6bTEs
+
+https://hex-rays.com/ida-free/#download
+
+sudo chmod +x idafree76_linux.run
+
+sudo ./idafree76_linux.run
+
+- after the installation remember to create a symbolic link:
+
+	sudo ln -s /opt/idafree-7.6/ida64 /usr/bin/
+	ida64 --> to start it

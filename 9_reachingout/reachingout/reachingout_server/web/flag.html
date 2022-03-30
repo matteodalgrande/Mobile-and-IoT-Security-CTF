@@ -1,0 +1,24 @@
+<html>
+	<head>
+		<title>Flag</title>
+		<meta charset='utf-8'/>
+		<!-- just including jquery, you can ignore the next line -->
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	</head>
+	<body>
+		<div>
+			<h1>Answer the following question.</h1>
+			<form action="check_math.php" method="POST">
+				<label for="answer">How much is 11-7=?</label>
+				<input id="answer" name="answer" required type="text" value="">
+				<input id="val1" name="val1" type="hidden" value="11">
+				<input id="oper" name="oper" type="hidden" value="-">
+				<input id="val2" name="val2" type="hidden" value="7">
+				<input id="solution" type="submit" value="Get Flag">
+			</form>
+			<br/>
+			<span id="output"></span>
+		</div>
+	</body>
+</html>
+						

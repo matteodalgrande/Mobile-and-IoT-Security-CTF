@@ -1,0 +1,16 @@
+**PINCODE**
+
+Goal: Understand how hard-coded string checks are not safe, even when using cryptographic alghorithms.
+
+In this writeup, we will be using JADX as our decompiler of choice.
+We locate "MainActivity" and "PinChecker". We are interested in the method "PinChecker.checkPin(..)".
+
+if (pin.length() != 6) {
+
+The correct PIN contains 6 numbers.
+Current PIN guess: NNNNNN
+
+Then, "checkPin(..)" performs a lot of iterations, and repeatedly encrypts the PIN with MD5 algorithm. At the end, it checks if the last iteration is equal to the string "d04988522ddfed3133cc24fb6924eae9".
+Even though the number of iteration is quite big, the PIN is very short so a brute-force attack can be performed. By copy-pasting "checkPin(..) code, and using all possible input permutations, we are able to find the PIN is about 30 minutes: "703958". By inputting the correct PIN, we receive the "FLAG{in_vino_veritas}".
+
+To speed this process up, we could use Java multithreading. Additionally, the usage of other external decryption tools was allowed (e.g., John the Ripper).

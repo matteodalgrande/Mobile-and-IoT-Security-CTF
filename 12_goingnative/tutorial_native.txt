@@ -1,0 +1,44 @@
+decompile the apk with online decompiler
+
+open ida and load it /resources/lib/x86_64/libnative-lib.so
+
+analize and find the flag
+
+
+
+examples is in github.com/android/ndk-samples (android-mk branch) [hello-jni app] as example
+	git clone -b android-mk --single-branch https://github.com/android/ndk-samples
+	hello-jni/jni/hello-jni.c
+	
+	
+	
+to compile c code in android go to file>settings>system settings>android sdk>sdk tools> and install:
+	- ndk(side by side) 
+	- CMake
+
+to compile the C code use the binary in:
+	~/Android/Sdk/ndk/23.0.7599858/ndk-build
+	ndk-build -C your_project_path -->only for project that has jni folder
+	e.g.
+		~/Android/Sdk/ndk/23.0.7599858/ndk-build -C /home/matteo/Desktop/Materie/Mobile\ and\ IOT\ Security\ -\ ok/11\&12/12_goingnative/ndk-samples/hello-jni/
+		
+	
+	after the compilation we can see that there is the ndk-samples/hello-jni/libs folder with x86 x64 arm folders, that rapresent different type of the architecture of android systems.
+	
+	
+Create a new project of the type native C++:
+	- C++ code is under app/cpp/
+	- C code is under 
+	
+after the creation of the project, we can move our just compiled code inside the app, creating a jniLibs folder under app/src/main/jniLibs and move inside to it the folders that was in the project ndk-samples/hello-jni/libs/
+
+Now we want to load the code in MainActivity not from c++ code but from C code. 
+In hello-jni/jni/hello-jni.c we can see that our class is: Java_com_example_hellojni_HelloJni_stringFromJNI
+We have to create a new package inside our App under app/src/main/java/ with name com.example.hellojni and create a new class called HelloJni and copy and paste the code that I have just in the MainActivity
+under jniLibs, we can find the name of the library that has libXXXXX.so, we have to take the XXXXX part and copy in the System.loadLibrary("XXXXX") now XXXXXX=hello-jni
+In the manifestfile.xml change <activity android:name=".MainActivity"> with <activity android:name="com.example.hellojni.HelloJni">
+
+
+so we can write our C code in the hello-jni/jni/hello-jni.c , compile it, move to the other app the library and see the result
+
+with IDA Is possible to upload the .so file and analyze it.

@@ -1,0 +1,10 @@
+This is the first Android challenge you will solve! The challenge requires to create an app that prints the string "hello-world-mobiotsec" on the system log, with the MOBIOTSEC tag. 
+
+
+scrivere un app che sia in grado di scrivere nei file di log un messaggio con tag: MOBIOTSEC e scritto: hello-world-mobiotsec
+
+result:
+	Log.i("MOBIOTSEC","hello-world-mobiotsec");
+	
+per controllare i log: 
+	adb logcat -s MOBIOTSEC

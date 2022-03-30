@@ -1,0 +1,5 @@
+--------- beginning of main
+--------- beginning of system
+09-22 10:14:47.243  7443  7443 I MOBIOTSEC: onServiceConnected
+09-22 10:14:47.243  7416  7416 I MOBIOTSEC: Malicious app bound to the service
+09-22 10:14:47.294  7443  7443 I MOBIOTSEC: flag: FLAG{si_vis_pacem_para_bellum}

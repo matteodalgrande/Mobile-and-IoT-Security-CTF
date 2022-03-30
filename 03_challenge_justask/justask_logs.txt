@@ -1,0 +1,13 @@
+--------- beginning of main
+09-09 10:02:31.434 14566 14566 I MOBIOTSEC: key: flag value: FLAG{Gutta_cavat_
+09-09 10:02:31.481 14566 14566 I MOBIOTSEC: key: flag value: lapidem_non_vi
+09-09 10:02:31.741 14566 14566 I MOBIOTSEC: key: hiddenFlag value: _sed_saepe
+09-09 10:02:31.741 14566 14566 I MOBIOTSEC: key: flag value: let's spice this up
+09-09 10:02:31.766 14566 14566 I MOBIOTSEC: key: follow value: Bundle[mParcelledData.dataSize=220]
+09-09 10:02:31.766 14566 14566 I MOBIOTSEC: key: follow value: Bundle[mParcelledData.dataSize=220]
+09-09 10:02:31.766 14566 14566 I MOBIOTSEC: key: the value value: Bundle[mParcelledData.dataSize=180]
+09-09 10:02:31.766 14566 14566 I MOBIOTSEC: key: rabbit value: Bundle[mParcelledData.dataSize=144]
+09-09 10:02:31.766 14566 14566 I MOBIOTSEC: key: hole value: Bundle[mParcelledData.dataSize=112]
+09-09 10:02:31.766 14566 14566 I MOBIOTSEC: key: deeper value: Bundle[mParcelledData.dataSize=76]
+09-09 10:02:31.766 14566 14566 I MOBIOTSEC: key: never ending story value: _cadendo}
+--------- beginning of system

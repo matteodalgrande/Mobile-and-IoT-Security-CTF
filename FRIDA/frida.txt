@@ -1,0 +1,28 @@
+FRIDA:
+pip install frida-tools
+
+to use frida it is necessary to have a rooted smartphone due to the fact that frida-server need superuser permisison, we install frida-server in the smartphone
+
+
+adb shell
+su
+/data/local/tmp/frida-server &
+
+frida-ps -U
+python3 akinator.py com.digidust.elokence.akinator.freemium akinator.js
+
+scrcpy --> to see the screen of the device
+
+
+Listing smartphone processes:
+	frida-ps -U
+
+Executing Frida with "my" template script (it's not the only way to execute it, of course)
+	python3 yourfile.py com.your.target.package yourfile.js
+
+Frida - Akinator Demo
+	akinator.py -> Attaches to target package
+	akinator.js -> Messes with Akinator at runtime
+	
+	
+

@@ -1,0 +1,87 @@
+FLAG{scientia}
+27 characters
+FLAG{ScIeNtIa_pOtEnTiA_EsT}
+22 = _
+21 = a
+
+
+flag.startsWith("FLAG{") &&  \\ FLAG{
+
+new StringBuilder(flag).reverse().toString().charAt(0) == '}' && 
+
+flag.length() == 27 
+
+&& flag.toLowerCase().substring(5).startsWith("scientia") && scientia
+
+new StringBuilder(flag).reverse().toString().toLowerCase().substring(1).startsWith(ctx.getString(R.string.last_part)) 
+new StringBuilder(flag).reverse().toString().toLowerCase().substring(1).startsWith(tse)
+tse -> est
+
+&& flag.toLowerCase().charAt(12) == 'a' 
+
+
+&& flag.charAt(13) == '_' &&  
+flag.charAt(22) == '_' && ---> 22 = _
+
+flag.toLowerCase().charAt(12) == 'a' --> 12 = a
+
+&& flag.toLowerCase().charAt(12) == flag.toLowerCase().charAt(21) ---> 21 = a
+
+
+
+getX() -> 2 
+getY() -> 3
+getZ() -> 4
+charAt((int) pow(2,2) + pow(2,3)) == charAt( pow(4,2) + 5.0d)
+4 + 8 == 16 + 6
+12 == 22
+a == a 
+&& flag.toLowerCase().charAt((int) (Math.pow((double) getX(), (double) getX()) + Math.pow((double) getX(), (double) getY()))) == flag.toLowerCase().charAt((int) (Math.pow((double) getZ(), (double) getX()) + 5.0d))
+
+
+/r == char(13)
+/n == char(9)
+bam(flag.substring((int) (Math.pow((double) getZ(), (double) getX()) - 2.0d), ((int) Math.pow((double) getX(), (double) (getX() + getY()))) - 10)).equals("cBgRaGvN") 
+cBgRaGvN
+pOtEnTiA
+
+0   1   2   3   4   5   6   7   8   9   10   11  12  
+a   b   c   d   e   f   g   h   i   j   k    l   m    
+n   o   p   q   r   s   t   u   v   w   x  
+
+
+
+before AZ after az
+     lowercase am +13
+     lowercase nz -13
+     UPPERCASE AM +13
+     UPPERCASE NZ -13
+
+
+            if (c >= 'a' && c <= 'm') {
+                c = (char) (c + '\r');   lowercase nz -13
+            } else if (c >= 'A' && c <= 'M') {  UPPERCASE NZ -13
+                c = (char) (c + '\r');
+            } else if (c >= 'n' && c <= 'z') { lowercase am +13
+                c = (char) (c - '\r');
+            } else if (c >= 'N' && c <= 'Z') { UPPERCASE AM +13
+                c = (char) (c - '\r');
+            }
+
+
+
+
+flag.substring(5, flag.length() - 1).matches(getR()))
+            
+    public static String getR() {
+        String r = "";
+        boolean upper = true;
+        for (int i = 0; i < 21; i++) {
+            r = upper ? r + "[A-Z_]" : r + "[a-z_]";
+            upper = !upper;
+        }
+        return r;
+    }
+
+
+FLAG{ScIeNtIa_pOtEnTiA_EsT}

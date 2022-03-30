@@ -1,0 +1,3 @@
+with my malicious app I discover the url to download the .dex file
+
+FLAG{memores_acti_prudentes_futuri}

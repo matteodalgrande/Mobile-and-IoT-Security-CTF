@@ -1,0 +1,41 @@
+hciconfig
+hcitool
+sudo hcitool lescan
+	{low energy scan}
+
+bluez.org --> low level of bluetooth
+hci(high level) exploit bluez to use bluetooth
+
+sudo btmgt
+	info
+	power off
+	advertising on
+	power on
+	info
+	
+	SET STATIC ADDRESS COMMANDS:
+	static-addr 00:00:00:00:00:00
+
+the same command translate into hciconfig command will be:
+hcieconfig cmd 0x00 0x2b 0x01 ... and the end the byte for the MAC address
+
+====
+sudo BLENO_HCI_DEVICE_ID=0 node breakmi.js
+
+---
+sudo btmon
+
+----
+sudo gatttool -i hci1 -I
+	conenct FD:E0:96:4B:F5:22
+	char-read-uuid 0x2A00
+			0x2A01
+
+----
+bleak -> github
+	sudo python3 miband-bleak.py
+	
+
+-----
+
+

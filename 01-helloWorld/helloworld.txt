@@ -1,0 +1,3 @@
+--------- beginning of main
+04-02 12:29:40.330  1028  1028 I MOBIOTSEC: hello-world-mobiotsec
+--------- beginning of system

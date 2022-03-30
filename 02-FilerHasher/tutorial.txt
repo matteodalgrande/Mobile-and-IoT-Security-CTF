@@ -1,0 +1,63 @@
+//////////////////////////////////////////////////////////////
+grandle.properties file add:
+android.injected.testOnly=false
+
+
+
+in build.grandle per aggiungere le librerie mancanti:
+https://mvnrepository.com/artifact/org.bouncycastle/bcprov-jdk15on
+
+build.grandle(:app) file add in dependencies{
+	.
+	.
+	.
+	implementation 'org.bouncycastle:bcprov-jdk15on:1.56'
+}
+
+
+
+//////////////////////////////////////////////////////////////
+
+https://developer.android.com/guide/components/intents-filters#Receiving
+
+To receive implicit intents, you must include the CATEGORY_DEFAULT category in the intent filter. 
+
+<activity android:name="ShareActivity">
+    <intent-filter>
+        <action android:name="android.intent.action.HASHFILE"/>
+        <category android:name="android.intent.category.DEFAULT"/>
+        <data android:mimeType="text/plain"/>
+    </intent-filter>
+</activity>
+
+
+/////////////////////////////////////////////////////////
+
+        //I have two activities: main activity and child activity.
+        // When I press a button in the main activity, the child activity is launched.
+        // Now I want to send some data back to the main screen.
+        // https://stackoverflow.com/questions/920306/sending-data-back-to-the-main-activity-in-android
+        // There are a couple of ways to achieve what you want, depending on the circumstances.
+        // The most common scenario (which is what yours sounds like) is when a child Activity is used to get user input - such as choosing a contact from a list or entering data in a dialog box. In this case you should use startActivityForResult to launch your child Activity.
+        // This provides a pipeline for sending data back to the main Activity using setResult. The setResult method takes an int result value and an Intent that is passed back to the calling Activity.
+            // Intent resultIntent = new Intent();
+            // TODO Add extras or a data URI to this intent as appropriate.
+            // resultIntent.putExtra("some_key", "String data");
+            // setResult(Activity.RESULT_OK, resultIntent);
+            // finish();
+        // To access the returned data in the calling Activity override onActivityResult. The requestCode corresponds to the integer passed in the startActivityForResult call, while the resultCode and data Intent are returned from the child Activity.
+            //@Override
+            //public void onActivityResult(int requestCode, int resultCode, Intent data) {
+            //  super.onActivityResult(requestCode, resultCode, data);
+            //  switch(requestCode) {
+            //    case (MY_CHILD_ACTIVITY) : {
+            //      if (resultCode == Activity.RESULT_OK) {
+            //        // TODO Extract the data returned from the child Activity.
+            //        String returnValue = data.getStringExtra("some_key");
+            //      }
+            //      break;
+            //    }
+            //  }
+            //}
+            
+

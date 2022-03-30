@@ -1,0 +1,77 @@
+**BABYREV**
+
+Goal: Becoming accustomed to reverse-engineering apks. In particular, learning how to utilize static analysis tools such as JADX or Dex2Jar + JD.
+
+In this writeup, we will be using JADX as our decompiler of choice.
+By opening "babyrev.apk", we can locate "com.mobiotsec.babyrev" package, which will likely contain the logic behind the target app. We are interested in two classes "MainActivity" and "FlagChecker", as the other two classes are always there by default.
+
+-MainActivity
+Initializes graphical elements. Whenever a user inputs a possible Flag, a "clickListener" stores the value and invokes the method "FlagChecker.checkFlag(..)". Now, we need to go to "FlagChecker" class.
+
+-FlagChecker
+Contains several methods, but we start by investigating "checkFlag(..)". The Flag will be accepted (and thus correct), only when able to pass through a huge "if" statement. Let's break it down.
+
+if (flag.startsWith("FLAG{")
+
+Explanation: The Flag starts with "FLAG{"
+Current Flag guess: FLAG{????????????
+
+&& new StringBuilder(flag).reverse().toString().charAt(0) == '}'
+
+Explanation: If we reverse the order of the letters in the Flag, it the character at index 0 equals "}"
+Current Flag guess: FLAG{????????????}
+
+&& flag.length() == 27
+
+Explanation: The Flag contains 27 characters
+Current Flag guess: FLAG{?????????????????????}
+
+&& flag.toLowerCase().substring(5).startsWith("scientia") 
+
+Explanation: The Flag is converted to lowercase. Then, we consider the substring starting at position 5 (just after "FLAG{"). This substring starts with "scientia"
+Current Flag guess: FLAG{scientia?????????????} (lowercase?)
+
+&& new StringBuilder(flag).reverse().toString().toLowerCase().substring(1).startsWith(ctx.getString(C0746R.string.last_part))
+
+Explanation: Reverse order. Lowercase. Substring pos 1 starts with a value located on the resources. We navigate into "babyrev.apk->Resources->resources.arsc->res->values->strings.xml". We know the location thanks to "R.string". We locate the string under the keyword "last_part" which has the following value "tse".
+Current Flag guess: FLAG{scientia??????????est} (lowercase?)
+
+&& flag.toLowerCase().charAt(12) == 'a'
+
+Explanation: Twelfth character is "a". Reduncant.
+Current Flag guess: FLAG{scientia??????????est} (lowercase?)
+
+&& flag.charAt(13) == '_' 
+
+Explanation: Thirteenth char is "_".
+Current Flag guess: FLAG{scientia_?????????est} (lowercase?)
+
+&& flag.charAt(22) == '_' 
+
+Explanation: Twenty-second char is "_".
+Current Flag guess: FLAG{scientia_????????_est} (lowercase?)
+
+&& flag.toLowerCase().charAt(12) == 'a' 
+
+Explanation: Twelfth character is "a". Redundant.
+Current Flag guess: FLAG{scientia_????????_est} (lowercase?)
+
+&& flag.toLowerCase().charAt(12) == flag.toLowerCase().charAt(21) 
+
+Explanation: Twenty-first char is equal to twelfth char, if transformed to lowercase.
+Current Flag guess: FLAG{scientia_???????a_est} (lowercase?)
+
+&& flag.toLowerCase().charAt((int) (Math.pow((double) getX(), (double) getX()) + Math.pow((double) getX(), (double) getY()))) == flag.toLowerCase().charAt((int) (Math.pow((double) getZ(), (double) getX()) + 5.0d)) 
+
+Explanation: Twelfth char 12 is equal to twenty-first char, is transformed to lowercase. Redundant.
+Current Flag guess: FLAG{scientia_???????a_est} (lowercase?)
+
+&& bam(flag.substring((int) (Math.pow((double) getZ(), (double) getX()) - 2.0d), ((int) Math.pow((double) getX(), (double) (getX() + getY()))) - 10)).equals("cBgRaGvN") 
+
+Explanation: Method "bam(..)" compares the integer value of a character, and then adds/subtracts 13. The app invokes "bam(flag.substring(14,22))". We copy-paste "bam" into our IDE (e.g., Visual Studio Code) and we reverse the process. In order to output "cBgRaGvN", we need to input "pOtEnTiA".
+Current Flag guess: FLAG{scientia_pOtEnTiA_est} (lowercase?)
+
+&& flag.substring(5, flag.length() - 1).matches(getR()))
+
+Explanation: The core part of the Flag flag.substring(5,26) must have alternating upper/lower case. Starting with uppercase.
+Current Flag guess: FLAG{ScIeNtIa_pOtEnTiA_EsT}

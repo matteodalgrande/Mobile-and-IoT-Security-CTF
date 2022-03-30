@@ -1,0 +1,1 @@
+The flag is announced on the system with a broadcast intent with action victim.app.FLAG_ANNOUNCEMENT 

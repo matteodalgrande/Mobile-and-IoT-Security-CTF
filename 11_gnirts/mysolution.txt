@@ -1,0 +1,7 @@
+for the first part use this one: https://replit.com/@matteodalgrande/Challeng11-gnirts-andorid#Main.java
+
+for the second part and check the hashes use:
+hashcat 
+FLAG{sic-parvis-MAGNA-28jAn1596}
+
+

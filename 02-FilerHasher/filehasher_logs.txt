@@ -1,0 +1,8 @@
+--------- beginning of main
+04-02 12:28:06.907   910   910 I MOBIOTSEC: /storage/emulated/0/YM3oPnYG.dat
+04-02 12:28:06.948   929   929 I MOBIOTSEC: Dat: file:///storage/emulated/0/YM3oPnYG.dat
+04-02 12:28:06.948   929   929 I MOBIOTSEC: Uri of file: file:///storage/emulated/0/YM3oPnYG.dat
+04-02 12:28:06.949   929   929 I MOBIOTSEC: Hash String: YXIGwdxJwMcaNSMOYQz
+04-02 12:28:06.950   929   929 I MOBIOTSEC: Hash SHA256: a592816cedf1d57ea9228d7ba1145256d4d9764efc78b70bcc58b5b4922f305c
+04-02 12:28:06.954   910   910 I MOBIOTSEC: Good job! The expected hash and the received hash match! The flag is FLAG{piger_ipse_sibi_obstat}
+--------- beginning of system

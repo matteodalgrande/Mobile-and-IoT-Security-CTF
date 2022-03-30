@@ -1,0 +1,46 @@
+This task will let you play with Content Providers.
+
+The target app exposes a Content Provider. Find all jokes authored by "elosiouk" and concatenate them. That's the flag.
+
+Some partial info on the target app:
+
+======================================================================
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.victimapp">
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.VictimApp">
+        ....
+        <provider
+            android:name=".MyProvider"
+            android:authorities="com.example.victimapp.MyProvider"
+            android:enabled="true"
+            android:exported="true">
+        </provider>
+    </application>
+</manifest>
+
+======================================================================
+String CREATE_TABLE =
+                    " CREATE TABLE joke" +
+                            " (id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                            " author TEXT NOT NULL, " +
+                            " joke TEXT NOT NULL);";
+
+
+======================================================================
+static final String PROVIDER_NAME = "com.example.victimapp.MyProvider";
+static final String TABLE_NAME = "joke";
+static final String URL = "content://" + PROVIDER_NAME + "/" + TABLE_NAME;
+static final int uriCode = 1;
+
+static final UriMatcher uriMatcher;
+    static{
+        uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
+        uriMatcher.addURI(PROVIDER_NAME, TABLE_NAME, uriCode);
+    }

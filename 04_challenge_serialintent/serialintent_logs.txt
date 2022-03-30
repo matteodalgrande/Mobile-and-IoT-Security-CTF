@@ -1,0 +1,7 @@
+--------- beginning of main
+04-07 00:47:14.266  9548  9548 E MOBIOTSEC: shuffling
+04-07 00:47:14.267  9548  9548 E MOBIOTSEC: sending back intent
+04-07 00:47:14.274  9521  9521 I MOBIOTSEC: Intent { (has extras) }
+04-07 00:47:14.278  9521  9521 I MOBIOTSEC: key: flag value: com.example.victimapp.FlagContainer@1b1e08
+04-07 00:47:14.278  9521  9521 I MOBIOTSEC: Result: FLAG{memento_audere_semper}
+--------- beginning of system

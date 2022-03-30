@@ -1,0 +1,42 @@
+**LOADME**
+
+Goal: More advance reversing (more cryptographic algorithms, invoking class objects and regex).
+
+In this writeup, we will be using JADX as our decompiler of choice.
+We locate "MainActivity" and "DoStuff". We are interested in the method "DoStuff.start(..)".
+
+-DoStuff
+We look into the first interesting call.
+
+String path = df(gu(), ctx.getCodeCacheDir().getAbsolutePath());
+
+The "gu()" function invokes another utility function with an encrypted string as its parameter.
+
+private String gu() {
+       return ds("Bj9yLW24l0OpvkoxoPXLb+UqJGp1t1slVcl/aTlHM+iolk4i083NV8E1LNJj/6w1");
+ }
+ 
+ The "ds(...)" function decrypts a string and returns its true value. The Secret Key is "mobiotseccomkey!", as we can see inside the code which utilizes the package name parts.
+ The same decryption method is used multiple times inside "DoStuff". To find out the real value of the strings, we can simply create our own encryption function by mirroring "ds(..)".
+ 
+ So, "gu()" returns a download URL, used by "df(..)". This method establishes an HTTP connection in order to download a file which is stored locally.
+ We will probably need to retrieve this file, but let's go on with code reversing.
+ 
+ return lc(path)
+ 
+ The "lc(..)" function loads a class from a dex file and invokes one of its methods. The dex file is exactly the file we downloaded in "df(..)".
+ The names of the class and the method are also encrypted, and their real values must be retrieved by using the same technique as before.
+ 
+ We understand what is happening, we need to retrieve the dex file which is downloaded. 
+ This file is temporary, but one can download it by simply copy-pasting the URL and downloading it from any browser.
+ A more advanced method would be to utilize Frida and remove the logic which deletes the file.
+ 
+ We open "test.dex" with JADX. We are interested in "LoadImage.load(..)", the method invoked by "lc(..)" through the DexClassLoader.
+ This method looks for a specific resource asset (an image) and loads it as a class. Meaning that this "logo.png" asset is in fact a dex file!
+ Another class and method are loaded from "logo.png".
+ 
+ We go back to "LoadMe.apk", extract "logo.png" and open it with JADX.
+ Inside it, we can find a simple check with the Flag shown in clear text.
+ 
+ boolean b = flag.equals("FLAG{memores_acti_prudentes_futuri}");
+ return b;

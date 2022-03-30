@@ -1,0 +1,52 @@
+package com.mobiotsec.babyrev;
+
+import android.content.Context;
+
+public class FlagChecker {
+    public static boolean checkFlag(Context ctx, String flag) {
+        if (flag.startsWith("FLAG{") && new StringBuilder(flag).reverse().toString().charAt(0) == '}' && flag.length() == 27 && flag.toLowerCase().substring(5).startsWith("scientia") && new StringBuilder(flag).reverse().toString().toLowerCase().substring(1).startsWith(ctx.getString(R.string.last_part)) && flag.toLowerCase().charAt(12) == 'a' && flag.charAt(13) == '_' && flag.charAt(22) == '_' && flag.toLowerCase().charAt(12) == 'a' && flag.toLowerCase().charAt(12) == flag.toLowerCase().charAt(21) && flag.toLowerCase().charAt((int) (Math.pow((double) getX(), (double) getX()) + Math.pow((double) getX(), (double) getY()))) == flag.toLowerCase().charAt((int) (Math.pow((double) getZ(), (double) getX()) + 5.0d)) && bam(flag.substring((int) (Math.pow((double) getZ(), (double) getX()) - 2.0d), ((int) Math.pow((double) getX(), (double) (getX() + getY()))) - 10)).equals("cBgRaGvN") && flag.substring(5, flag.length() - 1).matches(getR())) {
+            return true;
+        }
+        return false;
+    }
+
+    private static int getX() {
+        return 2;
+    }
+
+    private static int getY() {
+        return 3;
+    }
+
+    private static int getZ() {
+        return 4;
+    }
+
+    private static String bam(String s) {
+        String out = "";
+        for (int i = 0; i < s.length(); i++) { //pass all the string
+            char c = s.charAt(i);                 // put the char in it's iteration in the c var
+            if (c >= 'a' && c <= 'm') {            // if the char is from a to m it we add 
+                c = (char) (c + '\r');
+            } else if (c >= 'A' && c <= 'M') {
+                c = (char) (c + '\r');
+            } else if (c >= 'n' && c <= 'z') {
+                c = (char) (c - '\r');
+            } else if (c >= 'N' && c <= 'Z') {
+                c = (char) (c - '\r');
+            }
+            out = out + c;
+        }
+        return out;
+    }
+
+    public static String getR() {
+        String r = "";
+        boolean upper = true;
+        for (int i = 0; i < 21; i++) {
+            r = upper ? r + "[A-Z_]" : r + "[a-z_]";
+            upper = !upper;
+        }
+        return r;
+    }
+}

@@ -1,0 +1,158 @@
+**GNIRTS**
+
+Goal: More advance reversing (more cryptographic algorithms, invoking class objects and regex).
+
+In this writeup, we will be using JADX as our decompiler of choice.
+We locate "MainActivity" and "FlagChecker". We are interested in the method "FlagChecker.checkFlag(..)".
+
+-FlagChecker
+Contains several methods, but we start by investigating "checkFlag(..)". The Flag will be accepted (and thus correct), only when able to pass through various checks. Let's break it down.
+
+------------------------------------------------
+if (!flag.startsWith("FLAG{") || !flag.endsWith("}")) {
+------------------------------------------------
+
+Explanation: Flag starts with "FLAG{" and ends with "}".
+Current Flag guess: FLAG{?????????????}
+
+------------------------------------------------
+String core = flag.substring(5, 31);
+if (core.length() != 26) {
+------------------------------------------------
+
+Explanation: The core part of the flag start after "FLAG{" and ends before "}". Its size must be 26.
+Current Flag guess: FLAG{??????????????????????????}
+
+------------------------------------------------
+String[] ps = core.split(foo());
+------------------------------------------------
+
+Explanation: We split the core into different arrays, based on a specific delimiter character. Running "foo()" shows that this delimiter is "-".
+Current Flag guess: FLAG{??????????????????????????} + there are one or more "-"
+
+------------------------------------------------
+if (ps.length != 4) {
+------------------------------------------------
+
+Explanation: Core must be split into 4 arrays. Consequently, there must be 3 "-" characters.
+Current Flag guess: FLAG{??????????????????????????} + three "-"
+
+------------------------------------------------
+} else if(!bim(ps[0]) || !bum(ps[2]) || !bam(ps[3])) {
+------------------------------------------------
+
+Explanation: Core[0] section must abide by "bim(..)" regex, so it will be all lowercase (i.e., "l").
+Current Flag guess: FLAG{lllll-?????-?????-????????} (still don't know the size of each section)
+
+------------------------------------------------
+} else if(!bim(ps[0]) || !bum(ps[2]) || !bam(ps[3])) {
+------------------------------------------------
+
+Explanation: Core[2] must abide by "bum(..)" regex, so it will be all uppercase (i.e., "U").
+Current Flag guess: FLAG{lllll-UUUUU-?????-????????} (still don't know the size of each section)
+
+------------------------------------------------
+} else if(!bim(ps[0]) || !bum(ps[2]) || !bam(ps[3])) {
+------------------------------------------------
+
+Explanation: Core[3] must abide by "bam(..)" regex, so it will be uppercase, lowercase and numbers (i.e., "l/U/2"). Not that helpful.
+Current Flag guess: FLAG{lllll-?????-UUUUU-llUU22lU} (still don't know the size of each section)
+
+------------------------------------------------
+} else if(!core.replaceAll("[A-Z]", "X").replaceAll("[a-z]", "x").replaceAll("[0-9]", " ")
+.matches("[a-z]+.[a-z]+.[X ]+.  xXx    +")) {  
+------------------------------------------------
+
+Explanation: All uppercase letters in the core are replaced by "X". All lowercase by "x". All numbers by an empty space " ". 
+Current Flag guess: FLAG{xxxxx-?????-XXXXX-xxXX  xX}
+
+------------------------------------------------
+} else if(!core.replaceAll("[A-Z]", "X").replaceAll("[a-z]", "x").replaceAll("[0-9]", " ")
+.matches("[a-z]+.[a-z]+.[X ]+.  xXx    +")) {  
+------------------------------------------------
+
+Explanation: The transformed core, should match that specific format using regex. Some lowercase letters (core[0]), followed by other lowercase letters (core[1]), followed by both uppercase and numbers (core[2]). Core[3] must be formatted like this: number, number, lowercase, uppercase, lowercase, number, number, number, number. Some information is redundant (specifically core[0] and core[2] format).
+Current Flag guess: FLAG{xxxxx-xxxxx-XXXXX-  xXx    }
+
+------------------------------------------------
+char[] syms = new char[3];
+int[] idxs = {8, 15, 21};
+Set<Character> chars = new HashSet<>();
+for (int i = 0; i < syms.length; i++) {
+	syms[i] = flag.charAt(idxs[i]);
+	chars.add(Character.valueOf(syms[i]));
+}
+------------------------------------------------
+
+Explanation: Defines 3 indexes "8"-"15"-"21". Stores the characters at those indexes position "flag.charAt(8)", "flag.charAt(15)", "flag.charAt(21)". 
+Current Flag guess: FLAG{xxxxx-xxxxx-XXXXX-  xXx    }
+
+------------------------------------------------
+int sum = 0;
+for (char c : syms) {
+	sum += c;
+}
+------------------------------------------------
+
+Explanation: Converts "char" into "int", then adds up the three values found in the previous step.
+Current Flag guess: FLAG{xxxxx-xxxxx-XXXXX-  xXx    }
+
+------------------------------------------------
+if (sum == 135 && chars.size() == 1 ) {
+------------------------------------------------
+
+Explanation: The sum obtained in the previous step, must be 135. We already know there are three "-" characters in the flag. Character "-" has the exact "int" value of "45", which adds up to "135". We found out the position of the delimiters.
+(helpful link -> https://compiler.javatpoint.com/opr/test.jsp?filename=CharToIntExample1)
+Current Flag guess: FLAG{xxx-xxxxxx-XXXXX-  xXx    }
+
+------------------------------------------------
+if (me(ctx, dh(gs(ctx.getString(R.string.ct1), ctx.getString(R.string.k1)), ps[0]), 				ctx.getString(R.string.t1))
+------------------------------------------------
+
+-Method "gs(..)"
+Method "gs(..)" has two strings as parameters. We can find those parameters ("ct1", "k1") by looking inside "strings.xml". It does some nonsensical operation, but by reproducing it we find out that it always outputs a string with the name of a cryptographic algorithm (i.e., "MD5" or "SHA-256").
+
+-Method "dh(..)"
+Method "dh(..)" executes the cryptographic algorithm returned by method "gs(..)".
+
+-Method "me(..)"
+------------------------------------------------
+return ((Boolean) s1.getClass().getMethod(r(ctx.getString(R.string.m1)), new Class[]{Object.class}).invoke(s1, new Object[]{s2})).booleanValue();
+------------------------------------------------
+Method "me(..)" invokes the standard "equals(..)" method between two strings, as "m1" value is "slauqe", and method "r(..)" reverses it into "equals".
+
+------------------------------------------------
+if (me(ctx, dh(gs(ctx.getString(R.string.ct1), ctx.getString(R.string.k1)), ps[0]), 				ctx.getString(R.string.t1))
+------------------------------------------------
+Complete explanation with the three methods working together: Method "gs(..)" returns "MD5". Method "dh(..)" computes the MD5 hash of core[0]. Method "me(..)" compares that hash with another one hard-coded inside "strings.xml". This check must be true so we can perform a brute-force attack on core[0].
+We can easily copy-paste the code, in order to create our own checker so that the brute-force attack is on a very small scale. We will input a possible core[0] value, with our best guess being in the format of "xxx". The brute-force attack finds "sic".
+Current Flag guess: FLAG{sic-xxxxxx-XXXXX-  xXx    }
+
+------------------------------------------------
+&& me(ctx, dh(gs(ctx.getString(R.string.ct2), ctx.getString(R.string.k2)), ps[1]), ctx.getString(R.string.t2)) 
+------------------------------------------------
+
+Complete explanation with the three methods working together: Identical to the previous step for core[0], but this time we evaluate core[1]. We will input a possible core[1] value, with our best guess being in the format of "xxxxxx". The brute-force attack finds "parvis".
+Current Flag guess: FLAG{sic-parvis-XXXXX-  xXx    }
+
+------------------------------------------------
+&& me(ctx, dh(gs(ctx.getString(R.string.ct3), ctx.getString(R.string.k3)), ps[2]), ctx.getString(R.string.t3)) 
+------------------------------------------------
+
+Complete explanation with the three methods working together: Identical to the previous step for core[0], but this time we evaluate core[2]. We will input a possible core[2] value, with our best guess being in the format of "XXXXX". The brute-force attack finds "parvis".
+Current Flag guess: FLAG{sic-parvis-MAGNA-  xXx    }
+
+------------------------------------------------
+&& me(ctx, dh(gs(ctx.getString(R.string.ct4), ctx.getString(R.string.k4)), ps[3]), ctx.getString(R.string.t4))) {
+------------------------------------------------
+
+Complete explanation with the three methods working together: Identical to the previous step for core[0], but this time we evaluate core[3]. We will input a possible core[3] value, with our best guess being in the format of "  xXx    ". A brute-force attack on this section is technically possible, but there is a faster and simplier way. Firstly, we could notice that this section is a date (day -> two numbers, month -> three characters, year -> four numbers). This would greatly reduce the complexity of a brute-force attack. Secondly, we could google the flag "sic parvis magna" and find out that it was the motto of Sir Francis Drake died on the 28th of January in 1596. In the end, we would finally discover the value for core[3] as "28jAn1596".
+Current Flag guess: FLAG{sic-parvis-MAGNA-28jAn1596}
+
+------------------------------------------------
+if (me(ctx, dh(gs(ctx.getString(R.string.ct5), ctx.getString(R.string.k5)), flag), ctx.getString(R.string.t5))) {
+------------------------------------------------
+
+Complete explanation with the three methods working together: Identical to the previous step for core[0], but this time we evaluate the whole core. We already know the correct answer, but let's analyze this final check too. This time, the cryptographic algorithm is "SHA-256", and with our flag as an input, it correctly return the hash found inside "strings.xml". Thus, our solution is correct.
+
+FLAG{sic-parvis-MAGNA-28jAn1596}

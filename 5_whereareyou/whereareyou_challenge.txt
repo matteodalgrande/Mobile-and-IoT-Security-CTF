@@ -1,0 +1,12 @@
+whereareyou:
+You need to declare and implement a service with an intent filter with action com.mobiotsec.intent.action.GIMMELOCATION. The system will find your service and it will start it with a startForegroundService() method (and an appropriate intent as argument). The system expects to get back the current location (as a Location object).
+
+During the test, the system will change the current location at run-time and it will query your service to get the updated location. If the expected location matches with what you reply back, the flag will be printed in the logs.
+
+Your service should "return" the reply to the system with a broadcast intent, with a specific action and bundle, as in the snippet below:
+
+Location currLoc = getCurrentLocation(); // put your magic here
+Intent i = new Intent();
+i.setAction("com.mobiotsec.intent.action.LOCATION_ANNOUNCEMENT");
+i.putExtra("location", currLoc);
+sendBroadcast(i);
